@@ -52,6 +52,7 @@
     async function getCartItem() {
       const httpResponse = await fetch("http://localhost:8080/cartitem");
       const body = await httpResponse.json();
+      console.log(body);
 
       // var myCart =
       //     '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Price</th> </thead>';
@@ -81,7 +82,7 @@
           // document.getElementById("c").innerHTML = myCart;
           // document.getElementById("j").innerHTML +=
           //   item + " is in your cart" + "<br>";
-          return null;
+          // return null;
         } else {
 
           myHistory +=
