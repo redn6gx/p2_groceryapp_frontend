@@ -7,16 +7,18 @@
   </head>
   <body>
     <h1>This is a test page</h1>
-    <button type="button" class="btn btn-dark" onclick="getCartItem()">Get Cart History</button>
+    <button type="button" class="btn btn-dark" onclick="getCartItem()">
+      Get Cart History
+    </button>
     <span id="j"></span>
-  
+
     <div class="tableLeft">
       <span id="c"></span>
     </div>
-    
-  <div class="tableRight">
-    <span id= "h"></span>
-  </div>
+
+    <div class="tableRight">
+      <span id="h"></span>
+    </div>
 
     <!-- <table
       class="table table-bordered table-striped table-hover"
@@ -53,14 +55,26 @@
       const httpResponse = await fetch("http://localhost:8080/cartitem");
       const body = await httpResponse.json();
       console.log(body);
-
+      user = JSON.stringify(body[0], ["cartHistory", "user", "username"]);
+      user = user.replace(/"cartHistory":/g, "");
+      user = user.replace(/"user":/g, "");
+      user = user.replace(/"username":/g, "");
+      user = user.replace(/[{}, ""]/g, "");
+      console.log(user);
       // var myCart =
       //     '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Price</th> </thead>';
-        var myHistory =
-        '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Date</th> </thead>';
-
+      var myHistory =
+        '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th>  <th scope="col">Price</th> <th scope="col">Date</th> </thead>';
 
       for (let i = 0; i <= body.length; i++) {
+      
+      let userName = "Dave";  
+      let user = JSON.stringify(body[i], ["cartHistory", "user", "username"]);
+      user = user.replace(/"cartHistory":/g, "");
+      user = user.replace(/"user":/g, "");
+      user = user.replace(/"username":/g, "");
+      user = user.replace(/[{}, ""]/g, "");
+
         let cartDate = JSON.stringify(body[i], ["cartHistory", "date"]);
         cartDate = cartDate.replace(/"cartHistory":/g, "");
         cartDate = cartDate.replace(/"date":/g, "");
@@ -71,7 +85,12 @@
         item = item.replace(/"item_name":/g, "");
         item = item.replace(/[{}, ""]/g, "");
 
+        let price = JSON.stringify(body[i], ["item", "price"]);
+        price = price.replace(/"price":/g, "");
+        price = price.replace(/"item":/g, "");
+        price = price.replace(/[{}, ""]/g, "");
 
+        if (userName == user){
         if (cartDate == 0 || cartDate == null) {
           // myCart +=
           //   "<tr> <td>" +
@@ -84,24 +103,28 @@
           //   item + " is in your cart" + "<br>";
           // return null;
         } else {
-
           myHistory +=
             "<tr> <td>" +
             item +
             "</td><td>" +
+            "$" +
+            price +
+            "</td><td>" +
             cartDate +
             "</td> </tr>";
-            document.getElementById("h").innerHTML = myHistory;
+          document.getElementById("h").innerHTML = myHistory;
 
           // document.getElementById("j").innerHTML +=
           //   item + " was purchased on " + cartDate + "<br>";
         }
-
+      }
+      else{
+        document.getElementById("h").innerHTML = "Invalid user!";
+      }
       }
       // document.getElementById("c").innerHTML += myCart;
       // document.getElementById("c").innerHTML += "</table>";
     }
-
 
     async function getAllCartItems() {
       document.getElementById("t").innerHTML = "";
