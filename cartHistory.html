@@ -7,9 +7,13 @@
   </head>
   <body>
     <h1>This is a test page</h1>
-    <!-- <button onclick="getCartItem()">Get Cart Item</button>
+    <button onclick="getCartItem()">Get Cart Item</button>
+    <span id="j"></span>
 
-    <table
+    <span id="c"></span>
+    <span id= "h"></span>
+
+    <!-- <table
       class="table table-bordered table-striped table-hover"
       style="width: 50%"
     >
@@ -32,31 +36,116 @@
       </tr>
     </tbody>
     </table> -->
-    <button type="button" class="btn btn-dark" onclick="getAllCartItems()">Get all items</button>
+    <button type="button" class="btn btn-dark" onclick="getAllCartItems()">
+      Get all items
+    </button>
     <br /><br />
     <span id="t"></span>
-
-    <!-- 
-<button onclick="document.getElementById('allItems').innerHTML = getAllCartItems()">Get Cart Item</button>
-<p id="allItems"></p> -->
   </body>
 
   <script>
     async function getCartItem() {
-      const httpResponse = await fetch("http://localhost:8080/item/1");
+      const httpResponse = await fetch("http://localhost:8080/cartitem");
       const body = await httpResponse.json();
-      elements = [];
-      console.log(body);
-      console.log(body.username);
+      let elements = [];
+      let items = [];
 
-      extract(body);
-      // newElements = extract(body);
-      // elements.push(newElements);
-      // console.log(elements);
+      var myCart =
+          '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Price</th> </thead>';
+        var myHistory =
+        '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Date</th> </thead>';
+
+
+      for (let i = 0; i <= body.length; i++) {
+        let cartDate = JSON.stringify(body[i], ["cartHistory", "date"]);
+        cartDate = cartDate.replace(/"cartHistory":/g, "");
+        cartDate = cartDate.replace(/"date":/g, "");
+        cartDate = cartDate.replace(/[{}, ""]/g, "");
+
+        let item = JSON.stringify(body[i], ["item", "item_name"]);
+        item = item.replace(/"item":/g, "");
+        item = item.replace(/"item_name":/g, "");
+        item = item.replace(/[{}, ""]/g, "");
+
+
+        if (cartDate == 0 || cartDate == null) {
+          myCart +=
+            "<tr> <td>" +
+            item +
+            "</td><td>" +
+            "price will go here" +
+            "</td> </tr>";
+          document.getElementById("c").innerHTML = myCart;
+          // document.getElementById("j").innerHTML +=
+          //   item + " is in your cart" + "<br>";
+        } else {
+
+          myHistory +=
+            "<tr> <td>" +
+            item +
+            "</td><td>" +
+            cartDate +
+            "</td> </tr>";
+            document.getElementById("h").innerHTML = myHistory;
+
+          // document.getElementById("j").innerHTML +=
+          //   item + " was purchased on " + cartDate + "<br>";
+        }
+
+      }
+      // document.getElementById("c").innerHTML += myCart;
+      // document.getElementById("c").innerHTML += "</table>";
     }
 
+    // console.log(body)
+    // extract(body);
+    // elements.push(cartItem);
+    // console.log(elements)
+    // document.getElementById("j").innerHTML += cartItem;
+
+    // document.getElementById("c").innerHTML += myCart;
+    //   document.getElementById("c").innerHTML += "</table>";
+    //   document.getElementById("h").innerHTML += myHistory;
+    //   document.getElementById("h").innerHTML += "</table>";
+    //   for(let i = 0; i <=body.length; i++){
+    //     let cartDate = JSON.stringify(body[i], ["cartHistory", "date"]);
+    //     cartDate = cartDate.replace(/"cartHistory":/g, "");
+    //     cartDate = cartDate.replace(/"date":/g, "");
+    //     cartDate = cartDate.replace(/[{}, ""]/g, "");
+    //     let myCart =
+    //     '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Date</th> </thead>';
+    //     let myHistory =
+    //     '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Price</th> </thead>';
+
+    //     let item = JSON.stringify(body[i], ["item", "item_name"]);
+    //     item = item.replace(/"item":/g, "");
+    //     item = item.replace(/"item_name":/g, "");
+    //     item = item.replace(/[{}, ""]/g, "");
+    //     if(cartDate == 0 || cartDate == null){
+    //       myCart +=
+    //       "<tr> <td>" +
+    //       item +
+    //       "</td><td>" +
+    //       "price will go here" +
+    //       "</td> </tr>";
+    //     }
+    //     else {
+    //       myHistory +=
+    //       "<tr> <td>" +
+    //       item +
+    //       "</td><td>" +
+    //       cartDate +
+    //       "</td> </tr>";
+    //     }
+    //   }
+
+    //   document.getElementById("c").innerHTML += myCart;
+    //   document.getElementById("c").innerHTML += "</table>";
+    //   document.getElementById("h").innerHTML += myHistory;
+    //   document.getElementById("h").innerHTML += "</table>";
+
     async function getAllCartItems() {
-      document.getElementById("t").innerHTML = '';
+      document.getElementById("t").innerHTML = "";
       let elementName = [];
       let elementPrice = [];
       // let num = 4;
@@ -69,7 +158,7 @@
         const httpResponse = await fetch(url);
         const body = await httpResponse.json();
 
-        // console.log(i);
+        console.log(i);
         // console.log(body);
         newBodyName = JSON.stringify(body, ["item_name"]);
         // console.log(newBodyName);
@@ -98,7 +187,7 @@
     }
 
     function extract(body) {
-      document.getElementById("item_name").innerHTML = body.item_name;
+      document.getElementById("date").innerHTML = body.date;
     }
   </script>
 </html>
