@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Page</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!-- show item list -->
+    <h1>All Products</h1>
+    <!-- label for="itemList">Item List:</label -->
+    <div class="card">
+        <!-- need to get item information from database. for loop?-->
+        <label for="cardContent">Item ID:</label>
+        <input type="number" id="idInput" value="1" min="1" />
+        <button onclick="makeCard(idInput.value)">Make Card</button>
+
+        <!-- <img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
+        <h2>Tyson Boneless Skinless Chicken Breast</h2>
+        <p class="price">$19.99</p>
+        <p>100% Natural Chicken</p>
+        <p><button onclick="addToCart()">Add to Cart</button></p> -->
+    </div>
+
+    <div id="cardContainer">
+
+
+    </div>
+
+    <label for="card1"></label>
+
+    <!-- search for item -->
+    <!-- add to cart below each item -->
+    <!-- hover over item to see details-->
+
+
+
+</body>
+
+<script>
+
+    const cardList = [];
+
+    makeCard(1)
+    makeCard(2)
+
+    async function makeCard(id) {
+        let jsonItem = getItem(id);
+
+        const [idVal, nameVal, priceVal, descriptionVal] = 
+                [jsonItem['id'], jsonItem['item_name'], jsonItem['price'], jsonItem['item_description']]
+
+        let div = document.createElement('div');
+        div.id = 'cardContent';
+        div.className = 'card';
+
+        div.innerHTML =
+            `<img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
+            <h2 id="item_name${id}"></h2>
+            <p class="price" id="price${id}">$</p>
+            <p id="item_description${id}"></p>
+            <p><button onclick="addToCart()">Add to Cart</button></p>`;
+
+        if (!cardList.includes(`${id}`)) {
+            document.getElementById("cardContainer").appendChild(div)
+            cardList.push(`${id}`)
+        }
+    }
+
+    async function getItem(id) {
+        // const id = document.getElementById("idInput").value;
+        const url = `http://localhost:8080/item/${id}`;
+
+        const httpResponse = await fetch(url);
+        const body = await httpResponse.json();
+
+        console.log(body);
+        extract(body, id)
+    }
+
+    function extract(body, id)  {
+        //document.getElementById(`id${id}`).innerHTML = body.id;
+        document.getElementById(`item_name${id}`).innerHTML = body.item_name;
+        document.getElementById(`price${id}`).innerHTML = "$" + body.price;
+        document.getElementById(`item_description${id}`).innerHTML = body.item_description;
+    }
+
+    //needs callback?
+    async function addToCart(id) {
+
+        let jsonItem = getItem(id);
+        
+        const [idVal, nameVal, priceVal, descriptionVal] = 
+                [jsonItem['id'], jsonItem['item_name'], jsonItem['price'], jsonItem['item_description']]
+
+        const itemData = {
+            id: idVal,
+            item_name: nameVal,
+            price: priceVal,
+            item_description: descriptionVal
+        }
+
+        //need to select current cart
+        const cartId = document.getElementById("cartId").value;
+
+        const url = "http://localhost:8080/cartitem/";
+
+        const httpResponse = await fetch(url, {
+            method: "POST",            
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const body = await httpResponse.json();
+
+        console.log(body);
+    }
+
+</script>
+
+</html>
