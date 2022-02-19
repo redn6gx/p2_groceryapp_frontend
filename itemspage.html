@@ -43,25 +43,24 @@
 
     const cardList = [];
 
-    makeCard(1)
-    makeCard(2)
+    // makeCard(1)
+    // makeCard(2)
 
     async function makeCard(id) {
-        let jsonItem = getItem(id);
-
-        const [idVal, nameVal, priceVal, descriptionVal] = 
-                [jsonItem['id'], jsonItem['item_name'], jsonItem['price'], jsonItem['item_description']]
-
+        
         let div = document.createElement('div');
         div.id = 'cardContent';
         div.className = 'card';
 
         div.innerHTML =
-            `<img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
+            `<img id="img_path${id}" alt="img" style="width:100%">
             <h2 id="item_name${id}"></h2>
             <p class="price" id="price${id}">$</p>
             <p id="item_description${id}"></p>
+            <p id="stock${id}"></p>
             <p><button onclick="addToCart()">Add to Cart</button></p>`;
+
+        let jsonItem = getItem(id);
 
         if (!cardList.includes(`${id}`)) {
             document.getElementById("cardContainer").appendChild(div)
@@ -81,10 +80,12 @@
     }
 
     function extract(body, id)  {
-        //document.getElementById(`id${id}`).innerHTML = body.id;
+        // document.getElementById(`id${id}`).innerHTML = body.id;
         document.getElementById(`item_name${id}`).innerHTML = body.item_name;
         document.getElementById(`price${id}`).innerHTML = "$" + body.price;
         document.getElementById(`item_description${id}`).innerHTML = body.item_description;
+        document.getElementById(`stock${id}`).innerHTML = "In Stock: " + body.stock;
+        document.getElementById(`img_path${id}`).src = body.img_path;
     }
 
     //needs callback?
@@ -92,14 +93,17 @@
 
         let jsonItem = getItem(id);
         
-        const [idVal, nameVal, priceVal, descriptionVal] = 
-                [jsonItem['id'], jsonItem['item_name'], jsonItem['price'], jsonItem['item_description']]
+        const [idVal, nameVal, priceVal, descriptionVal, stockVal, imgVal] = 
+                [jsonItem['id'], jsonItem['item_name'], jsonItem['price'], jsonItem['item_description'],
+                jsonItem['stock'], jsonItem['img_path']]
 
         const itemData = {
             id: idVal,
             item_name: nameVal,
             price: priceVal,
-            item_description: descriptionVal
+            item_description: descriptionVal,
+            stock: stockVal,
+            img_path: imgVal
         }
 
         //need to select current cart
