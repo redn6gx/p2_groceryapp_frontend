@@ -57,21 +57,24 @@ function appendItems(cartItems){
 
         let currentRow = document.createElement("tr");
         let cartTable = document.querySelector(".cart-table");
-        currentRow.classList.add('cart-row');
+        currentRow.classList.add("cart-row");
         currentRow.innerHTML = 
             `<tr>
                 <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
                 <td><input type="number" value="${currCartItem.quantity}"></td>
-                <td><button onclick="removeItem()">Remove Item</button></td>
+                <td><button class="button-delete-${currCartItem.id}" onclick="removeItem">Remove Item</button></td>
             </tr>`;
         cartTable.appendChild(currentRow);
+        currentRow.getElementsByClassName(`button-delete-${currCartItem.id}`)[0].addEventListener('click', removeItem);
     }
 }
 
-function removeItem(){
-
+function removeItem(event){
+    var buttonClicked = event.target;
+    buttonClicked.parentElement.parentElement.remove();
 }
+
 
 async function updateCartState(){
 
