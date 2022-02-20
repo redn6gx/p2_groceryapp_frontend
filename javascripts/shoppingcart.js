@@ -16,13 +16,13 @@
  */
 
  if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', getCurrentCart);
+    document.addEventListener('DOMContentLoaded', getCurrentCartItems);
 } else {
-    getCurrentCart();
+    getCurrentCartItems();
 }
 
 currentUserId = 2; //get from local storage
-currentCartId = "";
+currentCartId = 1; //get from local storage
 
 async function getCurrentCart(){
     let url = `http://localhost:8080/carthistory/current/${currentUserId}`;
@@ -35,28 +35,38 @@ async function getCurrentCart(){
     console.log(currentCartId);
 }
 
-function addCurrentItems(){
-    
+async function getCurrentCartItems(){
+    let url = `http://localhost:8080/cartitem/${currentCartId}`;
+    let httpResponse = await fetch(url);
+    let requestBody = await httpResponse.json();
+
+    // console.log(currentCartItems);
+
+    // for(var prop of currentCartItems){
+    //     console.log(prop.item.item_name);
+    //     addItem(prop);
+    // }
+
+    appendItems(requestBody);
 }
 
-function addItem(){
-    var imgPath = "https://pics.drugstore.com/prodimg/610336/900.jpg";
-    var itemName = "Cinnamon Toast Crunch";
-    var quantity = 2;
-    var price = 20.00;
-    var currentRow = document.createElement("tr");
-    var cartTable = document.querySelector(".cart-table");
+function appendItems(cartItems){
+    for(let currCartItem of cartItems){
+        console.log(currCartItem);
+        let [imgPath, itemName, price] = [currCartItem.item.img_path, currCartItem.item.item_name, currCartItem.item.price];
 
-    currentRow.classList.add('cart-row');
-    currentRow.innerHTML = 
-    `<tr>
-        <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
-        <td><span>$${price.toFixed(2)}</span></td>
-        <td><input type="number" value="${quantity}"></td>
-        <td><button onClick="functionName()">Remove Item</button></td>
-    </tr>`;
-
-    cartTable.appendChild(currentRow);
+        let currentRow = document.createElement("tr");
+        let cartTable = document.querySelector(".cart-table");
+        currentRow.classList.add('cart-row');
+        currentRow.innerHTML = 
+            `<tr>
+                <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
+                <td><span>$${price.toFixed(2)}</span></td>
+                <td><input type="number" value="${currCartItem.quantity}"></td>
+                <td><button onclick="removeItem()">Remove Item</button></td>
+            </tr>`;
+        cartTable.appendChild(currentRow);
+    }
 }
 
 function removeItem(){
