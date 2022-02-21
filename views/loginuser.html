@@ -69,6 +69,9 @@
         currentCartId = requestBody.id;
         localStorage.setItem("Current_cart_ID", currentCartId);
         console.log(localStorage.getItem("Current_cart_ID"))
+
+        localStorage.setItem("CartRequestBody", JSON.stringify(requestBody) );
+        console.log(localStorage.getItem("CartRequestBody"))
     }
 
 </script>
