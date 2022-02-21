@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create New User</title>
+
+</head>
+
+<body>
+
+    <h1>Create New User</h1>
+
+    <label for="usernameInput">username:</label>
+    <input type="text" id="usernameInput"/><br>
+
+    <label for="passwordInput">password:</label>
+    <input type="text" id="passwordInput"/><br>
+
+    <button onclick="addUser()">Create User</button>
+
+    <br>
+    <br>
+    <span id = "t"></span>
+
+</body>
+
+
+<script>
+
+    async function addUser() {
+        const usernameVal = document.getElementById("usernameInput").value;
+        const passwordVal = document.getElementById("passwordInput").value;
+        
+        console.log(usernameVal);
+        console.log(passwordVal);
+
+        const data = {
+            username: usernameVal,
+            password: passwordVal,
+        }
+
+        const url = "http://localhost:8080/users/";
+
+        const httpResponse = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const body = await httpResponse.json();
+
+        console.log(body);
+
+        if (httpResponse.status == 500 ){
+            document.getElementById("t").innerHTML = "\nCustomer already exists!"
+        }else{
+            document.getElementById("t").innerHTML = "\nCustomer has been added!"
+        }
+
+    }
+</script>
+
+</html>
