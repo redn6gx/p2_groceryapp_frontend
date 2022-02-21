@@ -24,7 +24,7 @@ async function getCurrentCartItems(){
     for(let index in requestBody){
         originalCartItems[index] = requestBody[index];
     }
-    
+
     appendItems(requestBody);
 }
 
@@ -76,7 +76,6 @@ function updateTotal(){
         itemCount += parseInt(originalCartItems[key].quantity);
     }
     document.getElementById("total").innerHTML = "Subtotal (" + itemCount + " items): " + result;
-    console.log(result);
 }
 
 async function updateCartState(event){
@@ -115,5 +114,4 @@ async function updateCartState(event){
     toBeRemoved = [];
 }
 
-
-// window.addEventListener("beforeunload", updateCartState)
+window.addEventListener("onunload", updateCartState)
