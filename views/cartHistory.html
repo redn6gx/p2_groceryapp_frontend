@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
     <title>Test HTML</title>
   </head>
   <body>
-    <h1>This is a test page</h1>
+    <h1>Cart History</h1>
     <button type="button" class="btn btn-dark" onclick="getCartItem()">
       Get Cart History
     </button>
@@ -20,29 +20,6 @@
       <span id="h"></span>
     </div>
 
-    <!-- <table
-      class="table table-bordered table-striped table-hover"
-      style="width: 50%"
-    >
-    <thead>
-      <th scope="col">Item</th>
-      <th scope="col">price</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Test item</td>
-        <td>12</td>
-
-      </tr>
-      <tr>
-        <td>Test item 2</td>
-      </tr>
-      <tr>
-        <td>Name</td>
-        <td>23</td>
-      </tr>
-    </tbody>
-    </table> -->
     <button type="button" class="btn btn-dark" onclick="getAllCartItems()">
       Get all items
     </button>
@@ -55,34 +32,25 @@
       const httpResponse = await fetch("http://localhost:8080/cartitem");
       const body = await httpResponse.json();
       console.log(body);
-      user = JSON.stringify(body[0], ["cartHistory", "user", "username"]);
-      user = user.replace(/"cartHistory":/g, "");
-      user = user.replace(/"user":/g, "");
-      user = user.replace(/"username":/g, "");
-      user = user.replace(/[{}, ""]/g, "");
-      console.log(user);
-      // var myCart =
-      //     '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">Price</th> </thead>';
       var myHistory =
         '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th>  <th scope="col">Price</th> <th scope="col">Date</th> </thead>';
+      let userName = "pass";
 
       for (let i = 0; i <= body.length; i++) {
-      
-      let userName = "Dave";  
-      let user = JSON.stringify(body[i], ["cartHistory", "user", "username"]);
-      user = user.replace(/"cartHistory":/g, "");
-      user = user.replace(/"user":/g, "");
-      user = user.replace(/"username":/g, "");
-      user = user.replace(/[{}, ""]/g, "");
+        let user = JSON.stringify(body[i], ["cartHistory", "user", "username"]);
+        user = user.replace(/"cartHistory":/g, "");
+        user = user.replace(/"user":/g, "");
+        user = user.replace(/"username":/g, "");
+        user = user.replace(/[{}, ""]/g, "");
 
         let cartDate = JSON.stringify(body[i], ["cartHistory", "date"]);
         cartDate = cartDate.replace(/"cartHistory":/g, "");
         cartDate = cartDate.replace(/"date":/g, "");
         cartDate = cartDate.replace(/[{}, ""]/g, "");
 
-        let item = JSON.stringify(body[i], ["item", "item_name"]);
+        let item = JSON.stringify(body[i], ["item", "itemName"]);
         item = item.replace(/"item":/g, "");
-        item = item.replace(/"item_name":/g, "");
+        item = item.replace(/"itemName":/g, "");
         item = item.replace(/[{}, ""]/g, "");
 
         let price = JSON.stringify(body[i], ["item", "price"]);
@@ -90,37 +58,24 @@
         price = price.replace(/"item":/g, "");
         price = price.replace(/[{}, ""]/g, "");
 
-        if (userName == user){
-        if (cartDate == 0 || cartDate == null) {
-          // myCart +=
-          //   "<tr> <td>" +
-          //   item +
-          //   "</td><td>" +
-          //   "price will go here" +
-          //   "</td> </tr>";
-          // document.getElementById("c").innerHTML = myCart;
-          // document.getElementById("j").innerHTML +=
-          //   item + " is in your cart" + "<br>";
-          // return null;
-        } else {
-          myHistory +=
-            "<tr> <td>" +
-            item +
-            "</td><td>" +
-            "$" +
-            price +
-            "</td><td>" +
-            cartDate +
-            "</td> </tr>";
-          document.getElementById("h").innerHTML = myHistory;
+        if (userName == user) {
+          if (cartDate == 0 || cartDate == null) {
+          } else {
+            myHistory +=
+              "<tr> <td>" +
+              item +
+              "</td><td>" +
+              "$" +
+              price +
+              "</td><td>" +
+              cartDate +
+              "</td> </tr>";
+            document.getElementById("h").innerHTML = myHistory;
 
-          // document.getElementById("j").innerHTML +=
-          //   item + " was purchased on " + cartDate + "<br>";
-        }
-      }
-      else{
-        document.getElementById("h").innerHTML = "Invalid user!";
-      }
+            // document.getElementById("j").innerHTML +=
+            //   item + " was purchased on " + cartDate + "<br>";
+          }
+        } 
       }
       // document.getElementById("c").innerHTML += myCart;
       // document.getElementById("c").innerHTML += "</table>";
@@ -141,11 +96,11 @@
         const body = await httpResponse.json();
 
         console.log(i);
-        // console.log(body);
-        newBodyName = JSON.stringify(body, ["item_name"]);
+        console.log(body);
+        newBodyName = JSON.stringify(body, ["itemName"]);
         // console.log(newBodyName);
 
-        newBodyName = newBodyName.replace(/"item_name":/g, "");
+        newBodyName = newBodyName.replace(/"itemName":/g, "");
         newBodyName = newBodyName.replace(/[{}, ""]/g, "");
         newBodyPrice = JSON.stringify(body, ["price"]);
         newBodyPrice = newBodyPrice.replace(/"price":/g, "");
