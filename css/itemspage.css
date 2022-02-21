@@ -4,6 +4,11 @@
     box-sizing: border-box;
 } */
 
+body {
+  background: blanchedalmond;
+  color: rgb(59, 11, 11);
+}
+
 #cardContainer {
   display:flex;
   flex-direction: row;
