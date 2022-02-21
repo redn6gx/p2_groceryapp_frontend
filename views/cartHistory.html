@@ -19,19 +19,12 @@
     <div class="tableRight">
       <span id="h"></span>
     </div>
-
-    <button type="button" class="btn btn-dark" onclick="getAllCartItems()">
-      Get all items
-    </button>
-    <br /><br />
-    <span id="t"></span>
   </body>
 
   <script>
     async function getCartItem() {
       const httpResponse = await fetch("http://localhost:8080/cartitem");
       const body = await httpResponse.json();
-      console.log(body);
       var myHistory =
         '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th>  <th scope="col">Price</th> <th scope="col">Date</th> </thead>';
       let userName = "pass";
@@ -71,60 +64,9 @@
               cartDate +
               "</td> </tr>";
             document.getElementById("h").innerHTML = myHistory;
-
-            // document.getElementById("j").innerHTML +=
-            //   item + " was purchased on " + cartDate + "<br>";
           }
-        } 
+        }
       }
-      // document.getElementById("c").innerHTML += myCart;
-      // document.getElementById("c").innerHTML += "</table>";
-    }
-
-    async function getAllCartItems() {
-      document.getElementById("t").innerHTML = "";
-      let elementName = [];
-      let elementPrice = [];
-      // let num = 4;
-      let id = 4;
-      let myTable =
-        '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th> <th scope="col">price</th> </thead>';
-
-      for (let i = 0; i <= id; i++) {
-        const url = `http://localhost:8080/item/${i + 1}`;
-        const httpResponse = await fetch(url);
-        const body = await httpResponse.json();
-
-        console.log(i);
-        console.log(body);
-        newBodyName = JSON.stringify(body, ["itemName"]);
-        // console.log(newBodyName);
-
-        newBodyName = newBodyName.replace(/"itemName":/g, "");
-        newBodyName = newBodyName.replace(/[{}, ""]/g, "");
-        newBodyPrice = JSON.stringify(body, ["price"]);
-        newBodyPrice = newBodyPrice.replace(/"price":/g, "");
-        newBodyPrice = newBodyPrice.replace(/[{}, ""]/g, "");
-
-        elementName.push(newBodyName);
-        elementPrice.push(newBodyPrice);
-
-        myTable +=
-          "<tr> <td>" +
-          elementName[i] +
-          "</td><td>" +
-          "$" +
-          elementPrice[i] +
-          "</td> </tr>";
-      }
-      document.getElementById("t").innerHTML += myTable;
-      document.getElementById("t").innerHTML += "</table>";
-
-      // document.getElementById("t").innerHTML = myTable;
-    }
-
-    function extract(body) {
-      document.getElementById("date").innerHTML = body.date;
     }
   </script>
 </html>
