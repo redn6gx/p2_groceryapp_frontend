@@ -1,4 +1,15 @@
 body {
   background: blanchedalmond;
   color: rgb(59, 11, 11);
+  margin-left: 10px;
 }
+
+/* .tableRight{
+  width: 60%; /* whichever width you want */
+  margin-left: 50%; /* minus the amount to make it 100% */
+} */
+
+/* .tabelLeft{
+  width: 60%; /* whichever width you want */
+  margin-right: 50%; 
+} */
