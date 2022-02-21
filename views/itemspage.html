@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Shopping Page</title>
     <link rel="stylesheet" href="../css/itemspage.css">
-    <link rel="stylesheet" href="../css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="../css/bootstrap.css"> -->
     <!-- <script src="../javascripts/shoppingcart.js"></script> -->
 
     <title>Store</title>
@@ -100,10 +100,19 @@
     }
 
     async function addToCart(id, cartId) {
+        let url = `http://localhost:8080/cartitem/${cartId}`;
+        let httpResponse = await fetch(url);
+        let requestBody = await httpResponse.json();
 
-        for (item in originalCartItems) {
-            itemIdList.push(item.id)
+        originalCartItems = [];
+        for(let index in requestBody){
+            originalCartItems.push(requestBody[index]);
         }
+
+        for (item of originalCartItems) {
+            itemIdList.push(String(item.item.id))
+        }
+        console.log(itemIdList)
 
         var idVal = document.getElementById(`id${id}`).innerHTML;
         var nameVal = document.getElementById(`itemName${id}`).innerHTML;
@@ -124,15 +133,17 @@
             img_path: imgVal
         }
 
-        const cartHistoryData = {
-            id: cartId,
-            user: {
-                id: 1,
-                username: "john",
-                password: "jacob",
-            },
-            date: null
-        }
+        const cartHistoryData = window.localStorage.getItem("CartRequestBody");
+
+        // const cartHistoryData = {
+        //     id: cartId,
+        //     user: {
+        //         id: 1,
+        //         username: "john",
+        //         password: "jacob",
+        //     },
+        //     date: null
+        // }
 
         const cartItemData = {
             item: itemData,
@@ -142,14 +153,13 @@
 
         console.log(cartItemData)
 
-        //need to select current cart (cartHistory with null date)
+        // need to select current cart (cartHistory with null date)
         //const currCart = localStorage.getItem(currentCart);
         //const currCartId = currCart.id
-        const currCartId = 1;
-        //const cartId = document.getElementById("cartId").value;
+        const currCartId = window.localStorage.getItem("Current_cart_ID");
 
         //POST Mapping
-        const url = `http://localhost:8080/cartitem/`;
+        url = `http://localhost:8080/cartitem/`;
 
         // //PUT Mapping
         // const url = `http://localhost:8080/cartitem/${currCartId}`;
