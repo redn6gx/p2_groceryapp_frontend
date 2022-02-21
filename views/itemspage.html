@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Page</title>
+    <link rel="stylesheet" href="../css/itemspage.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <!-- <script src="../javascripts/shoppingcart.js"></script> -->
+
+    <title>Store</title>
+</head>
+
+<body>
+    <!-- show item list -->
+    <h1>All Products</h1>
+    <!-- label for="itemList">Item List:</label -->
+    <div class="card">
+        <!-- need to get item information from database. for loop?-->
+        <label for="cardContent">Item ID:</label>
+        <input type="number" id="idInput" value="1" min="1" />
+        <button onclick="makeCard(idInput.value, 1)">Make Card</button>
+
+        <label for="searchItems">What would you like to search for?:</label>
+        <input type="string" id="searchInput"/>
+        <button onclick="generateSearchCards(searchInput.value)">Search</button>
+
+        <label for="allItems"></label>
+        <button onclick="getAllItems()">Show All Items:</button>
+
+        <!-- <img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
+        <h2>Tyson Boneless Skinless Chicken Breast</h2>
+        <p class="price">$19.99</p>
+        <p>100% Natural Chicken</p>
+        <p><button onclick="addToCart()">Add to Cart</button></p> -->
+    </div>
+
+    <div id="cardContainer">
+
+
+    </div>
+
+    <label for="card1"></label>
+
+    <!-- search for item -->
+    <!-- add to cart below each item -->
+    <!-- hover over item to see details-->
+
+
+
+</body>
+
+<script>
+
+    const cardList = [];
+    const itemIdList = [];
+
+    // makeCard(1, 1)
+
+    async function makeCard(id, cartId) {
+        
+        let div = document.createElement('div');
+        div.id = 'cardContent';
+        div.className = 'card';
+
+        div.innerHTML =
+            `<p id="id${id}">${id}</p>
+            <img id="img_path${id}" alt="img" style="width:100%">
+            <h2 id="itemName${id}"></h2>
+            <p class="price" id="price${id}">$</p>
+            <p id="item_description${id}"></p>
+            <p id="stock${id}"></p>
+            <p id="button${id}"><button onclick="addToCart(${id}, ${cartId})">Add to Cart</button></p>`;
+
+        let jsonItem = getItem(id);
+
+        if (!cardList.includes(`${id}`)) {
+            document.getElementById("cardContainer").appendChild(div)
+            cardList.push(`${id}`)
+        }
+    }
+
+    async function getItem(id) {
+        // const id = document.getElementById("idInput").value;
+        const url = `http://localhost:8080/item/${id}`;
+
+        const httpResponse = await fetch(url);
+        const body = await httpResponse.json();
+
+        console.log(body);
+        extract(body, id)
+    }
+
+    function extract(body, id)  {
+        document.getElementById(`id${id}`).style.display = "none";
+        document.getElementById(`itemName${id}`).innerHTML = body.itemName;
+        document.getElementById(`price${id}`).innerHTML = "$" + body.price;
+        document.getElementById(`item_description${id}`).innerHTML = body.item_description;
+        document.getElementById(`stock${id}`).innerHTML = "In Stock: " + body.stock;
+        document.getElementById(`img_path${id}`).src = "../" + body.img_path;
+    }
+
+    async function addToCart(id, cartId) {
+
+        for (item in originalCartItems) {
+            itemIdList.push(item.id)
+        }
+
+        var idVal = document.getElementById(`id${id}`).innerHTML;
+        var nameVal = document.getElementById(`itemName${id}`).innerHTML;
+        var priceVal = document.getElementById(`price${id}`).innerHTML;
+        priceVal = priceVal.slice(1);
+        var descriptionVal = document.getElementById(`item_description${id}`).innerHTML;
+        var stockVal = document.getElementById(`stock${id}`).innerHTML;
+        stockVal = stockVal.slice(10);
+        var imgVal = document.getElementById(`img_path${id}`).innerHTML;
+        imgVal = imgVal.slice(3);
+
+        const itemData = {
+            id: idVal,
+            itemName: nameVal,
+            price: priceVal,
+            item_description: descriptionVal,
+            stock: stockVal,
+            img_path: imgVal
+        }
+
+        const cartHistoryData = {
+            id: cartId,
+            user: {
+                id: 1,
+                username: "john",
+                password: "jacob",
+            },
+            date: null
+        }
+
+        const cartItemData = {
+            item: itemData,
+            cartHistory: cartHistoryData,
+            quantity: 1
+        }
+
+        console.log(cartItemData)
+
+        //need to select current cart (cartHistory with null date)
+        //const currCart = localStorage.getItem(currentCart);
+        //const currCartId = currCart.id
+        const currCartId = 1;
+        //const cartId = document.getElementById("cartId").value;
+
+        //POST Mapping
+        const url = `http://localhost:8080/cartitem/`;
+
+        // //PUT Mapping
+        // const url = `http://localhost:8080/cartitem/${currCartId}`;
+
+        if (!itemIdList.includes(idVal)) {
+
+            const httpResponse = await fetch(url, {
+                method: "POST",            
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cartItemData)
+            });
+
+            const body = await httpResponse.json();
+            itemIdList.push(idVal);
+
+            console.log(body);
+        } else {
+            console.log("Item already exists in cart!")
+        }
+    }
+
+    async function getAllItems() {
+        const url = `http://localhost:8080/item/`;
+
+        const httpResponse = await fetch(url);
+        const requestBody = await httpResponse.json();
+
+        console.log(requestBody);
+
+        const itemIds = []
+        for(let index in requestBody){
+            itemIds.push(requestBody[index].id);
+        }
+
+        if(itemIds.length != 0) {
+            for(let i=0; i < itemIds.length; i++){
+                makeCard(itemIds[i], 1)
+            }
+        }
+        
+    }
+    
+    async function searchForItems(pattern) {
+            const url = `http://localhost:8080/item/search/${pattern}`;
+
+            const httpResponse = await fetch(url);
+            const requestBody = await httpResponse.json();
+
+            console.log(requestBody);
+
+            const itemIds = []
+            for(let index in requestBody){
+                itemIds.push(requestBody[index].id);
+            }
+
+            console.log("list of ids: " + itemIds)
+            return itemIds;
+    }
+
+    async function generateSearchCards(pattern) {
+        if(pattern != "") {
+            const itemIds = await searchForItems(pattern);
+
+            console.log(itemIds)
+
+            if(itemIds.length != 0) {
+                for(let i=0; i< itemIds.length; i++){
+                    makeCard(itemIds[i], 1)
+                }
+            }
+        }
+    }
+
+</script>
+
+</html>
