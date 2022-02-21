@@ -76,6 +76,7 @@ function updateTotal(){
         itemCount += parseInt(originalCartItems[key].quantity);
     }
     document.getElementById("total").innerHTML = "Subtotal (" + itemCount + " items): " + result;
+    document.getElementsByClassName("cart-headers")[0].style.display = (itemCount == 0) ? "none" : "table-row";
 }
 
 async function updateCartState(event){
