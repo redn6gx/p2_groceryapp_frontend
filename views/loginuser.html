@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login Page</title>
+
+</head>
+
+<body>
+
+    <h1>Login User</h1>
+
+    <label for="usernameInput">username:</label>
+    <input type="text" id="usernameInput"/><br>
+
+    <label for="passwordInput">password:</label>
+    <input type="text" id="passwordInput"/><br>
+
+    <button onclick="loginUser()">Login User</button>
+
+    <br>
+    <br>
+    <span id = "t"></span>
+
+</body>
+
+<script>
+
+    async function loginUser() {
+
+        const usernameVal = document.getElementById("usernameInput").value;
+        const passwordVal = document.getElementById("passwordInput").value;
+
+        const url = `http://localhost:8080/users/${usernameVal}`;
+
+        const httpResponse = await fetch(url);
+        const body = await httpResponse.json();
+        
+        user_id = 0;
+        user_name = ""
+
+        if(body.username == usernameVal && body.password == passwordVal){
+            console.log("SUCCESS")
+            user_id = body.id;
+            user_name = body.username
+            window.localStorage.setItem("userId", user_id);
+            let x = window.localStorage.getItem("userId");
+            console.log(x)
+            window.localStorage.setItem("userName", user_name);
+            let y = window.localStorage.getItem("userName");
+            console.log(y)
+    
+            document.getElementById("t").innerHTML = "\nLogin Successful!"
+            getCurrentCart();
+
+        }else{
+            console.log("FAILURE")
+            document.getElementById("t").innerHTML = "\nIncorrect Credentials!"
+        }
+       
+    }
+
+    async function getCurrentCart(){
+        let url = `http://localhost:8080/carthistory/current/${user_id}`;
+        console.log(url)
+        let httpResponse = await fetch(url);
+        let requestBody = await httpResponse.json();
+        console.log(requestBody)
+        currentCartId = requestBody.id;
+        localStorage.setItem("Current_cart_ID", currentCartId);
+        console.log(localStorage.getItem("Current_cart_ID"))
+    }
+
+</script>
+
+</html>
