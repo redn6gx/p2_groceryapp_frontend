@@ -1,21 +1,4 @@
-/**
- * Retrieve all data from the current user's cart
- * Append each item to the main cart divider
- *      Remove button: Remove this item from cart
- *      Quantity: Number input that can be changed
- * Update current state of cart when user leaves page
- * Checkout button: Redirect to checkout page 
- * 
- * 
- * 
- * On page load
- *      Get a list of all items in shopping cart
- *      Iterate through items
- *      Add each item to the cart
- *      Update state of cart when leaving the page
- */
-
- if (document.readyState == 'loading') {
+if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', getCurrentCartItems);
 } else {
     getCurrentCartItems();
@@ -23,16 +6,13 @@
 
 currentUserId = 2; //get from local storage
 currentCartId = 1; //get from local storage
+toBeRemoved = [];
 
 async function getCurrentCart(){
     let url = `http://localhost:8080/carthistory/current/${currentUserId}`;
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
     currentCartId = requestBody.id;
-
-    console.log(requestBody.user.id);
-    console.log(requestBody);
-    console.log(currentCartId);
 }
 
 async function getCurrentCartItems(){
@@ -40,42 +20,100 @@ async function getCurrentCartItems(){
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
 
-    // console.log(currentCartItems);
-
-    // for(var prop of currentCartItems){
-    //     console.log(prop.item.item_name);
-    //     addItem(prop);
-    // }
-
+    originalCartItems = {};
+    for(let index in requestBody){
+        originalCartItems[index] = requestBody[index];
+    }
+    
     appendItems(requestBody);
 }
 
 function appendItems(cartItems){
+    var index = 0;
     for(let currCartItem of cartItems){
-        console.log(currCartItem);
         let [imgPath, itemName, price] = [currCartItem.item.img_path, currCartItem.item.item_name, currCartItem.item.price];
-
         let currentRow = document.createElement("tr");
         let cartTable = document.querySelector(".cart-table");
+
         currentRow.classList.add("cart-row");
+        currentRow.setAttribute("id", index);
         currentRow.innerHTML = 
             `<tr>
                 <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
-                <td><input type="number" value="${currCartItem.quantity}"></td>
-                <td><button class="button-delete-${currCartItem.id}" onclick="removeItem">Remove Item</button></td>
+                <td><input class="qty" type="number" value="${currCartItem.quantity}"></td>
+                <td><button class="button-delete" onclick="removeItem">Remove Item</button></td>
             </tr>`;
         cartTable.appendChild(currentRow);
-        currentRow.getElementsByClassName(`button-delete-${currCartItem.id}`)[0].addEventListener('click', removeItem);
+        currentRow.getElementsByClassName("button-delete")[0].addEventListener("click", removeItem);
+        currentRow.getElementsByClassName("qty")[0].addEventListener("change", updateQuantity)
+        index++;
     }
+    updateTotal();
 }
 
 function removeItem(event){
     var buttonClicked = event.target;
+    var parentId = buttonClicked.parentElement.parentElement.id;
+    toBeRemoved.push(originalCartItems[parentId].id);
+    delete originalCartItems[parentId];
     buttonClicked.parentElement.parentElement.remove();
+    updateTotal();
+}
+
+function updateQuantity(event){
+    var qtyChanged = event.target;
+    var parentId = qtyChanged.parentElement.parentElement.id;
+    originalCartItems[parentId].quantity = qtyChanged.value;
+    updateTotal();
+}
+
+function updateTotal(){
+    var result = 0;
+    var itemCount = 0;
+    for(let key in originalCartItems){
+        result += originalCartItems[key].quantity * originalCartItems[key].item.price;
+        itemCount += parseInt(originalCartItems[key].quantity);
+    }
+    document.getElementById("total").innerHTML = "Subtotal (" + itemCount + " items): " + result;
+    console.log(result);
+}
+
+async function updateCartState(event){
+    for(let key in originalCartItems){
+        let url = `http://localhost:8080/cartitem/${originalCartItems[key].id}`;
+
+        const data = {
+            id: originalCartItems[key].id,
+            quantity: originalCartItems[key].quantity,
+            cartHistory: originalCartItems[key].cartHistory,
+            item: originalCartItems[key].item
+        }
+
+        const httpResponse = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const body = await httpResponse.json();
+    }
+
+    for(let cartItemId of toBeRemoved){
+        let url = `http://localhost:8080/cartitem/${cartItemId}`;
+
+        const httpResponse = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    toBeRemoved = [];
 }
 
 
-async function updateCartState(){
-
-}
+// window.addEventListener("beforeunload", updateCartState)
