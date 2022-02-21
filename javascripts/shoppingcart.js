@@ -114,4 +114,4 @@ async function updateCartState(event){
     toBeRemoved = [];
 }
 
-window.addEventListener("beforeunload", updateCartState)
+// window.addEventListener("beforeunload", updateCartState)
