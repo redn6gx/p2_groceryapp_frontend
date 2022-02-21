@@ -27,7 +27,8 @@
       const body = await httpResponse.json();
       var myHistory =
         '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th>  <th scope="col">Price</th> <th scope="col">Date</th> </thead>';
-      let userName = "pass";
+          let y = window.localStorage.getItem("userName");
+          let userName = y;
 
       for (let i = 0; i <= body.length; i++) {
         let user = JSON.stringify(body[i], ["cartHistory", "user", "username"]);
