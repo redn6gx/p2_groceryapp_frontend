@@ -1,7 +1,7 @@
 if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', getCurrentCartItems);
+    document.addEventListener('DOMContentLoaded', getCurrentCart);
 } else {
-    getCurrentCartItems();
+    getCurrentCart();
 }
 
 currentUserId = 2; //get from local storage
@@ -13,6 +13,8 @@ async function getCurrentCart(){
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
     currentCartId = requestBody.id;
+
+    console.log(requestBody.id);
 }
 
 async function getCurrentCartItems(){
@@ -31,7 +33,7 @@ async function getCurrentCartItems(){
 function appendItems(cartItems){
     var index = 0;
     for(let currCartItem of cartItems){
-        let [imgPath, itemName, price] = [currCartItem.item.img_path, currCartItem.item.item_name, currCartItem.item.price];
+        let [imgPath, itemName, price] = [currCartItem.item.img_path, currCartItem.item.itemName, currCartItem.item.price];
         let currentRow = document.createElement("tr");
         let cartTable = document.querySelector(".cart-table");
 
@@ -41,8 +43,8 @@ function appendItems(cartItems){
             `<tr>
                 <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
-                <td><input class="qty" type="number" value="${currCartItem.quantity}"></td>
-                <td><button class="button-delete" onclick="removeItem">Remove Item</button></td>
+                <td><input class="qty" type="number" min="1" value="${currCartItem.quantity}"></td>
+                <td><button class="button-delete">Remove Item</button></td>
             </tr>`;
         cartTable.appendChild(currentRow);
         currentRow.getElementsByClassName("button-delete")[0].addEventListener("click", removeItem);
@@ -115,4 +117,3 @@ async function updateCartState(event){
     toBeRemoved = [];
 }
 
-// window.addEventListener("beforeunload", updateCartState)
