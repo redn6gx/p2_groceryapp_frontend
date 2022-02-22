@@ -65,7 +65,8 @@
         price = price.replace(/[{}, ""]/g, "");
 
         if (userName == user) {
-          if (cartDate == 0 || cartDate == null) {
+          if (cartDate == "0" || cartDate == "null") {
+            document.getElementById("h") = "No cart history"
           } else {
             myHistory +=
               "<tr> <td>" +
