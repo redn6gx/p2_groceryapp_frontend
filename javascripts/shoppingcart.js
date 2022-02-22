@@ -4,19 +4,23 @@ if (document.readyState == 'loading') {
     getCurrentCartItems();
 }
 
-currentUserId = 2;
-currentCartId = 1;
+currentUserId = localStorage.getItem("userId");
+currentCartId = localStorage.getItem("Current_cart_ID");
+
+console.log(currentUserId);
+console.log(currentCartId);
+
 toBeRemoved = [];
 
 async function getCurrentCart(){
-    let url = `http://localhost:8080/carthistory/current/${currentUserId}`;
+    let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/carthistory/current/${currentUserId}`;
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
     currentCartId = requestBody.id;
 }
 
 async function getCurrentCartItems(){
-    let url = `http://localhost:8080/cartitem/${currentCartId}`;
+    let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${currentCartId}`;
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
 
@@ -83,7 +87,7 @@ function updateTotal(){
 
 async function updateCartState(event){
     for(let key in originalCartItems){
-        let url = `http://localhost:8080/cartitem/${originalCartItems[key].id}`;
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${originalCartItems[key].id}`;
 
         const data = {
             id: originalCartItems[key].id,
@@ -104,7 +108,7 @@ async function updateCartState(event){
     }
 
     for(let cartItemId of toBeRemoved){
-        let url = `http://localhost:8080/cartitem/${cartItemId}`;
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${cartItemId}`;
 
         const httpResponse = await fetch(url, {
             method: "DELETE",
