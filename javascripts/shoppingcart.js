@@ -1,11 +1,11 @@
 if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', getCurrentCart);
+    document.addEventListener('DOMContentLoaded', getCurrentCartItems);
 } else {
-    getCurrentCart();
+    getCurrentCartItems();
 }
 
-currentUserId = 2; //get from local storage
-currentCartId = 1; //get from local storage
+currentUserId = 2;
+currentCartId = 1;
 toBeRemoved = [];
 
 async function getCurrentCart(){
@@ -13,8 +13,6 @@ async function getCurrentCart(){
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
     currentCartId = requestBody.id;
-
-    console.log(requestBody.id);
 }
 
 async function getCurrentCartItems(){
@@ -41,12 +39,14 @@ function appendItems(cartItems){
         currentRow.setAttribute("id", index);
         currentRow.innerHTML = 
             `<tr>
-                <td><img src="${imgPath}" alt="" <span>${itemName}</span></td>
+                <td><img src="${imgPath}" alt="" /><span class="itemName">${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
                 <td><input class="qty" type="number" min="1" value="${currCartItem.quantity}"></td>
+                <td><button class="button-recipe">Find Recipes</button></td>
                 <td><button class="button-delete">Remove Item</button></td>
             </tr>`;
         cartTable.appendChild(currentRow);
+        currentRow.getElementsByClassName("button-recipe")[0].addEventListener("click", toRecipes);
         currentRow.getElementsByClassName("button-delete")[0].addEventListener("click", removeItem);
         currentRow.getElementsByClassName("qty")[0].addEventListener("change", updateQuantity)
         index++;
@@ -117,3 +117,13 @@ async function updateCartState(event){
     toBeRemoved = [];
 }
 
+function toRecipes(event) {
+    var buttonClicked = event.target;
+    var parentId = buttonClicked.parentElement.parentElement.id;
+    var nameOfItem = originalCartItems[parentId].item.itemName;
+    window.localStorage.setItem("nameOfItem", nameOfItem);
+    // await findRecipes(nameOfItem);
+    window.location.href = "../views/recipes.html";
+}
+
+// http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080
