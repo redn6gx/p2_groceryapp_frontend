@@ -21,6 +21,7 @@
             <a href="shoppingcart.html">Cart</a>
             <a href="itemspage.html">Store</a>
             <a href="cartHistory.html">Orders</a>
+            <a href="Checkout.html">Checkout</a>
             <a href="javascript:void(0);" class="icon" onclick="myFunction()">
               <i class="fa fa-bars"></i>
             </a>
@@ -28,24 +29,27 @@
     </div>
     <!-- label for="itemList">Item List:</label -->
     <div class = buttonsContainer>
-        <div class="buttons">
-            <label for="cardContent">Item ID:</label>
+        <div class="button">
+            <label for="cardContent">Item ID:</label> <br>
             <input type="number" id="idInput" value="1" min="1" />
-            <button onclick="makeCard(idInput.value, 1)">Make Card</button>
-
-            <label for="searchItems">What would you like to search for?:</label>
+            <button onclick="makeCard(idInput.value, 1)">Make Card</button> <br>
+        </div>
+        <div class="button">
+            <label for="searchItems">What would you like to search for?</label> <br>
             <input type="string" id="searchInput"/>
-            <button onclick="generateSearchCards(searchInput.value)">Search</button>
-
+            <button onclick="generateSearchCards(searchInput.value)">Search</button> <br>
+        </div>
+        <div class="button">
             <label for="allItems"></label>
-            <button onclick="getAllItems()">Show All Items:</button>
-
-            <!-- <img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
+            <button onclick="getAllItems()">Show All Items:</button> <br>
+        </div>
+        <!-- <div class="button">
+            <img src="images/chicken.png" alt="Chicken Breast" style="width:100%">
             <h2>Tyson Boneless Skinless Chicken Breast</h2>
             <p class="price">$19.99</p>
             <p>100% Natural Chicken</p>
-            <p><button onclick="addToCart()">Add to Cart</button></p> -->
-        </div>
+            <p><button onclick="addToCart()">Add to Cart</button></p>
+        </div> -->
     </div>
 
     <div id="cardContainer"> </div>
@@ -62,7 +66,7 @@
 
 <script>
 
-    const cardList = [];
+    cardList = [];
     const itemIdList = [];
 
     // makeCard(1, 1)
