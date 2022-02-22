@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    
+   
+</head>
+<body>
+    <div class="header">
+        <div class="topnav" id="myTopnav">
+            <a href="homepage.html" class="active">Home</a>
+            <a href="shoppingcart.html">Cart</a>
+            <a href="itemspage.html">Store</a>
+            <a href="cartHistory.html">Orders</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </div>
+
+    
+    <h1> Checkout</h1>   
+    <table style="width: 90%;">
+    <style>
+        table, th, td {
+            border: 1px solid black ;
+        }
+        .button1 {
+            background-color: rgba(0, 0, 0, 0.158);
+            text-decoration-color: white;
+        }
+        .button2 {
+            background-color: rgba(0, 0, 0, 0.158);
+            text-decoration-color: white;
+        }
+    </style>   
+        
+        <tr>
+            <th> Item ID</th>
+            <th> Item Name </th>
+            <th> Quantity </th>
+            <th> Price </th>
+            
+            
+        </tr>
+        <!-- table row 1 -->
+        <tr>
+            <td> <label for="idInput0"></label>
+                <input type="number" id = "idInput0" value = "1" min = "1"/> </td>
+            <td> <label for="nameInput0" id="nameInput0"></label> </td>
+            <td><label for="quantityInput0"></label>
+                <input type ="number" id ="quantityInput0" value = "1" min = "1"/></td>
+            <td><label for = "priceInput0"></label>
+                 <input type = "number" id = "priceInput0"></td>
+        </tr>
+        <tr>
+            <td> <label for="idInput0"></label>
+                <input type="number" id = "idInput" value = "1" min = "1"/> </td>
+            <td> <label for="nameInput0" id="nameInput0"></label> </td>
+            <td><label for="quantityInput0"></label>
+                <input type ="number" id ="quantityInput0" value = "1" min = "1"/></td>
+            <td><label for = "priceInput0"></label>
+                 <input type = "number" id = "priceInput0"></td>
+        </tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+        </tr>
+    
+    </table>
+ 
+
+  <button class="button button1" type ="button" onclick="Canceled">Cancel</button1>
+  <button class="button button2" type = "button" onclick="alert('Checked out')">Checkout</button2> 
+    
+  
+ 
+    <button onclick="getAllCartItemsbyCartHistoryId()"></button>
+    <button onclick = "updateAllItems()"></button>
+    
+    
+</body>
+
+<script>
+    //window.localStorage.getItem("currentCartId");
+    cartHistoryId = 1;
+
+    async function getAllCartItemsbyCartHistoryId() {
+
+        
+
+        const url = (`http://localhost:8080/cartitem/${cartHistoryId}`);
+
+        const id = document.getElementById("idInput0").value
+
+        const httpResponse = await fetch (url);
+        const item = await httpResponse.json();
+
+    
+
+
+            
+        return item;
+
+        
+
+    }
+
+    async function updateAllItems() {
+        
+        const cartitems = await getAllCartItemsbyCartHistoryId();
+        itemList = []
+        const index = 0;
+        updateItem(cartitems[0].item.id, 0)
+
+        for (item of cartitems) {
+            // updateItem(item.item.id);
+            itemList.push(item)
+        }
+        for (i = 0; i < itemList.length; i++) {
+            extract(itemList[i], index);
+        }
+
+        
+
+    }
+
+    async function getItem(itemID) {
+        let url = (`http://localhost:8080/item/${itemID}`);
+        const httpResponse = await fetch(url);
+        const item = await httpResponse.json();
+        return item;
+    }
+
+    async function updateItem(itemID, index) {
+        
+
+        let url = (`http://localhost:8080/item/${itemID}`);
+
+        const itemVal = await getItem(itemID);
+
+        console.log(document.getElementById(`idInput${index}`).value)
+        
+        //Hard Code
+        const data = {
+            id: itemID,
+            img_path : itemVal.img_path,
+            item_description: itemVal.item_description,
+            itemName: itemVal.itemName,
+            stock: itemVal.stock,
+            price: itemVal.price
+
+        }; 
+
+        const httpResponse = await fetch (url, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            item: JSON.stringify(data)
+    });
+
+        const item = await httpResponse.json();
+
+
+    }
+    function extract(item, index) {
+            console.log(item);
+        document.getElementById(`idInput${index}`).value = item.item.id;
+
+        console.log(item.item.id);
+        console.log(item.item.itemName);
+        document.getElementById(`nameInput${index}`).innerHTML = item.item.itemName;
+        console.log(item.item.stock)
+        document.getElementById(`quantityInput${index}`).value = item.item.stock;
+        document.getElementById(`priceInput${index}`).value = item.item.price;
+    }
+    function sumStr(str){
+    let strArr = str.split(",");
+    let sum = strArr.reduce(function(total, num){
+      return parseFloat(total) + parseFloat(num);
+    });
+
+    return sum;
+
+
+    }
+</script>
+</html>
