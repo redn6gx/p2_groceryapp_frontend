@@ -148,7 +148,7 @@
             img_path: imgVal
         }
 
-        const cartHistoryData = window.localStorage.getItem("CartRequestBody");
+        const cartHistoryData = JSON.parse(window.localStorage.getItem("CartRequestBody"));
 
         // const cartHistoryData = {
         //     id: cartId,
@@ -179,9 +179,9 @@
         // //PUT Mapping
         // const url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${currCartId}`;
 
-        if (!itemIdList.includes(idVal)) {
+        // if (!itemIdList.includes(idVal)) {
 
-            const httpResponse = await fetch(url, {
+            httpResponse = await fetch(url, {
                 method: "POST",            
                 headers: {
                     'Content-Type': 'application/json'
@@ -193,9 +193,9 @@
             itemIdList.push(idVal);
 
             console.log(body);
-        } else {
-            console.log("Item already exists in cart!")
-        }
+        // } else {
+        //     console.log("Item already exists in cart!")
+        // }
     }
 
     async function getAllItems() {
