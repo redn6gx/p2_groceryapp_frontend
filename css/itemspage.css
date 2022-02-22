@@ -13,22 +13,29 @@ body {
   float: left
 }
 
-.buttonContainer {
+.buttonsContainer {
+  position: relative;
+}
+
+.button{
+  display: inline-block;
   border: none;
   outline: 0;
   padding: 12px;
   color: white;
-  background-color: #000;
+  background-color: rgb(173, 106, 18);
   text-align: center;
-  cursor: pointer;
   width: 100%;
+  max-width: 300px;
   font-size: 18px;
 }
 
 #cardContainer {
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  /* display:flex;
+  flex-direction: row; */
+  display: inline;
+  border: 1px solid #ccc;
+  /* flex-wrap: wrap; */
 }
 
 .card {
