@@ -7,9 +7,6 @@ if (document.readyState == 'loading') {
 currentUserId = localStorage.getItem("userId");
 currentCartId = localStorage.getItem("Current_cart_ID");
 
-console.log(currentUserId);
-console.log(currentCartId);
-
 toBeRemoved = [];
 
 async function getCurrentCart(){
@@ -43,7 +40,7 @@ function appendItems(cartItems){
         currentRow.setAttribute("id", index);
         currentRow.innerHTML = 
             `<tr>
-                <td><img src="${imgPath}" alt="" /><span class="itemName">${itemName}</span></td>
+                <td><img src="../${imgPath}" alt="" /><span class="itemName">${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
                 <td><input class="qty" type="number" min="1" value="${currCartItem.quantity}"></td>
                 <td><button class="button-recipe">Find Recipes</button></td>
@@ -129,5 +126,3 @@ function toRecipes(event) {
     // await findRecipes(nameOfItem);
     window.location.href = "../views/recipes.html";
 }
-
-// http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080
