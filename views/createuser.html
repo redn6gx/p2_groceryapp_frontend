@@ -64,6 +64,48 @@
         }else{
             document.getElementById("t").innerHTML = "\nCustomer has been added!"
         }
+
+        await newCartHistory(body.id, usernameVal, passwordVal);
+    }
+
+    async function newCartHistory(bodyId, usernameVal, passwordVal) {
+        const url = "http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/carthistory/";
+
+        const data = {
+            user: 
+            {
+                id: bodyId,
+                username: usernameVal,
+                password: passwordVal
+            },
+            date: null
+        }
+
+        const httpResponse = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        const body = await httpResponse.json();
+        console.log(body);
+
+        getCurrentCart(bodyId)
+    }
+
+    async function getCurrentCart(user_id_val){
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/carthistory/current/${user_id}`;
+        console.log(url)
+        let httpResponse = await fetch(url);
+        let requestBody = await httpResponse.json();
+        console.log(requestBody)
+        currentCartId = requestBody.id;
+        localStorage.setItem("Current_cart_ID", currentCartId);
+        console.log(localStorage.getItem("Current_cart_ID"))
+
+        localStorage.setItem("CartRequestBody", JSON.stringify(requestBody) );
+        console.log(localStorage.getItem("CartRequestBody"))
     }
 </script>
 
