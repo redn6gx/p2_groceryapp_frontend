@@ -23,7 +23,7 @@
 
   <script>
     async function getCartItem() {
-      const httpResponse = await fetch("http://localhost:8080/cartitem");
+      const httpResponse = await fetch("http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem");
       const body = await httpResponse.json();
       var myHistory =
         '<table class="table table-bordered table-striped table-hover" style="width: 50%;"> <thead> <th scope="col">Item</th>  <th scope="col">Price</th> <th scope="col">Date</th> </thead>';

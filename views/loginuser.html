@@ -37,7 +37,7 @@
         const usernameVal = document.getElementById("usernameInput").value;
         const passwordVal = document.getElementById("passwordInput").value;
 
-        const url = `http://localhost:8080/users/${usernameVal}`;
+        const url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/users/${usernameVal}`;
 
         const httpResponse = await fetch(url);
         const body = await httpResponse.json();
@@ -67,7 +67,7 @@
     }
 
     async function getCurrentCart(){
-        let url = `http://localhost:8080/carthistory/current/${user_id}`;
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/carthistory/current/${user_id}`;
         console.log(url)
         let httpResponse = await fetch(url);
         let requestBody = await httpResponse.json();
