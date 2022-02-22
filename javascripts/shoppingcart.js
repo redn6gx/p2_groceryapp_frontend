@@ -4,19 +4,20 @@ if (document.readyState == 'loading') {
     getCurrentCartItems();
 }
 
-currentUserId = 2;
-currentCartId = 1;
+currentUserId = localStorage.getItem("userId");
+currentCartId = localStorage.getItem("Current_cart_ID");
+
 toBeRemoved = [];
 
 async function getCurrentCart(){
-    let url = `http://localhost:8080/carthistory/current/${currentUserId}`;
+    let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/carthistory/current/${currentUserId}`;
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
     currentCartId = requestBody.id;
 }
 
 async function getCurrentCartItems(){
-    let url = `http://localhost:8080/cartitem/${currentCartId}`;
+    let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${currentCartId}`;
     let httpResponse = await fetch(url);
     let requestBody = await httpResponse.json();
 
@@ -33,21 +34,21 @@ function appendItems(cartItems){
     for(let currCartItem of cartItems){
         let [imgPath, itemName, price] = [currCartItem.item.img_path, currCartItem.item.itemName, currCartItem.item.price];
         let currentRow = document.createElement("tr");
-        let cartTable = document.querySelector(".cart-table");
+        let cartTable = document.querySelector(".table");
 
         currentRow.classList.add("cart-row");
         currentRow.setAttribute("id", index);
         currentRow.innerHTML = 
             `<tr>
-                <td><img src="${imgPath}" alt="" /><span class="itemName">${itemName}</span></td>
+                <td><img class="img-fluid" src="../${imgPath}" alt="" /><span class="itemName">${itemName}</span></td>
                 <td><span>$${price.toFixed(2)}</span></td>
                 <td><input class="qty" type="number" min="1" value="${currCartItem.quantity}"></td>
-                <td><button class="button-recipe">Find Recipes</button></td>
-                <td><button class="button-delete">Remove Item</button></td>
+                <td><button class="btn btn-warning btn-lg">Find Recipes</button></td>
+                <td><button class="btn btn-outline-danger btn-lg">Remove Item</button></td>
             </tr>`;
         cartTable.appendChild(currentRow);
-        currentRow.getElementsByClassName("button-recipe")[0].addEventListener("click", toRecipes);
-        currentRow.getElementsByClassName("button-delete")[0].addEventListener("click", removeItem);
+        currentRow.getElementsByClassName("btn btn-warning btn-lg")[0].addEventListener("click", toRecipes);
+        currentRow.getElementsByClassName("btn btn-outline-danger btn-lg")[0].addEventListener("click", removeItem);
         currentRow.getElementsByClassName("qty")[0].addEventListener("change", updateQuantity)
         index++;
     }
@@ -83,7 +84,7 @@ function updateTotal(){
 
 async function updateCartState(event){
     for(let key in originalCartItems){
-        let url = `http://localhost:8080/cartitem/${originalCartItems[key].id}`;
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${originalCartItems[key].id}`;
 
         const data = {
             id: originalCartItems[key].id,
@@ -104,7 +105,7 @@ async function updateCartState(event){
     }
 
     for(let cartItemId of toBeRemoved){
-        let url = `http://localhost:8080/cartitem/${cartItemId}`;
+        let url = `http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/cartitem/${cartItemId}`;
 
         const httpResponse = await fetch(url, {
             method: "DELETE",
@@ -122,8 +123,9 @@ function toRecipes(event) {
     var parentId = buttonClicked.parentElement.parentElement.id;
     var nameOfItem = originalCartItems[parentId].item.itemName;
     window.localStorage.setItem("nameOfItem", nameOfItem);
-    // await findRecipes(nameOfItem);
     window.location.href = "../views/recipes.html";
 }
 
-// http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080
+function toCheckout() {
+    window.location.href = "../views/Checkout.html";
+}

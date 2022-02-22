@@ -7,11 +7,11 @@
     text-align: center;
 } */
 
+body{
+    background-image: linear-gradient(to right, black,DarkCyan,CornflowerBlue,DarkBlue,CornflowerBlue,DarkCyan,black);
+}
+
 .table {
     margin: auto;
     width: 50%; 
  }
-
-div {
-    margin: auto;
-}

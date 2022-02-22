@@ -1,4 +1,15 @@
 .cart-row img{
-    height: 10%;
-    width: 10%;
+    height: 23%;
+    width: 23%;
+}
+
+body{
+    font-size: 30px;
+    font-style: oblique;
+    font-weight: 700;
+    background-color:burlywood;
+}
+
+tr{
+    background-color: hsl(40, 70%, 90%);
 }
