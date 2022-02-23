@@ -14,3 +14,6 @@ A Grocery E-Commerce App designed to emulate an online marketplace, with the pur
 * CSS
 * Bootstrap
 * Amazon EC2
+
+## EC2 URL (Integrated)
+* http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/
