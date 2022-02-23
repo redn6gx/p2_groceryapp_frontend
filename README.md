@@ -3,7 +3,7 @@
    > By Art Weinstein, Ben Karlsberg, Robert Davis, Ryan Haque, Tomas Anbessaw
 
 ### Site Demo
-https://benkarlsberg.github.io/p2_groceryapp_frontend/
+https://redn6gx.github.io/p2_groceryapp_frontend/
 
 ### Reference to Spring Boot Appication Github: 
 * [Back-End Repository](https://github.com/benkarlsberg/GroceryAppBackEndP2)
