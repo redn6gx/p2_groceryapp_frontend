@@ -18,5 +18,15 @@ A Grocery E-Commerce App designed to emulate an online marketplace, with the pur
 ## App Usage
 * Paste file path of homepage.html into your internet browser (located in the /views folder)
 
+## Features (Navigated through navbar at the top of every page)
+* Home Page
+* Create User Page
+* Login Page
+* Items Page
+* Shopping Cart Page
+* Cart History Page
+* Recpies Page
+* Checkout Page
+
 ## EC2 URL (Integrated)
 * http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/
