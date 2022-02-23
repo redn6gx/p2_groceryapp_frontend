@@ -15,5 +15,8 @@ A Grocery E-Commerce App designed to emulate an online marketplace, with the pur
 * Bootstrap
 * Amazon EC2
 
+## App Usage
+* Paste file path of homepage.html into your internet browser (located in the /views folder)
+
 ## EC2 URL (Integrated)
 * http://ec2-54-219-132-12.us-west-1.compute.amazonaws.com:8080/
