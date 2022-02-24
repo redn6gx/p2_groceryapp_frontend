@@ -1,0 +1,17 @@
+/* .cart-row img{
+    height: 50%;
+    width: 50%;
+} */
+
+/* td {
+    text-align: center;
+} */
+
+body{
+    background-image: linear-gradient(to right, black,DarkCyan,CornflowerBlue,DarkBlue,CornflowerBlue,DarkCyan,black);
+}
+
+.table {
+    margin: auto;
+    width: 50%; 
+ }
